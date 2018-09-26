@@ -13,7 +13,7 @@ setInterval(() => {
 const fs = require('fs');
 const Discord = require('discord.js');
 const { token } = require('./config.json');
-const botconfig = require('./botconfig.json');
+const { prefix } = require('./botconfig.json');
 const client = new Discord.Client();
 client.commands = new Discord.Collection();
 
@@ -28,18 +28,12 @@ const cooldowns = new Discord.Collection();
 
 client.on('ready', () => {
 	console.log('Ready!');
-	client.user.setActivity('#loveNEP');
+	client.user.setActivity('© 2018 NEP');
+  client.user.setUsername("[~]FL Bot");
 	 console.log(`Ready to serve in ${client.channels.size} channels on ${client.guilds.size} servers, for a total of ${client.users.size} users.`);
 });
 
 client.on('message', message => {
-	let prefixes = JSON.parse(fs.readFileSync("./prefixes.json", "utf8"));
-	if(!prefixes[message.guild.id]){
-		prefixes[message.guild.id] = {
-			prefixes: botconfig.prefix
-		};
-	}
-	let prefix = prefixes[message.guild.id].prefixes;
 	if (!message.content.startsWith(prefix) || message.author.bot) return;
 
 	const args = message.content.slice(prefix.length).split(/ +/);
