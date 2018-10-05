@@ -6,6 +6,7 @@ module.exports = {
 	name: 'user-info',
   aliases: ['uinfo'],
 	description: 'Get info of the tagged user(s), or your own avatar.',
+  guildOnly: true,
 	execute(message, args) {
 	
     let user;

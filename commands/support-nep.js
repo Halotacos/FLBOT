@@ -17,5 +17,6 @@ const NEP = new Discord.RichEmbed()
     .setDescription('Love NEP? Want to support his love of coding, and help him go to college? Well click the link to donate on PayPal! Patreon coming soon!')
     .setThumbnail('https://162787-524467-raikfcquaxqncofqfm.stackpathdns.com/wp-content/uploads/paypal-logo.jpg')
     .addField('Click here for the link', 'https://www.paypal.me/NEPOfficial')
+.addField('Or do you want some merch?', 'https://streamlabs.com/nep__official/#/merch')
     .setTimestamp()
   .setFooter('© 2018 NEP', 'https://cdn.discordapp.com/attachments/460993484162203649/493947059276349450/image.jpg');
