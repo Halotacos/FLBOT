@@ -1,0 +1,25 @@
+module.exports = {
+	name: 'mute',
+	description: 'Information about the arguments provided.',
+	args: true,
+  guildOnly: true,
+	execute(message, args) {
+		const staff = message.author
+    let perms = message.member.permissions;
+
+// Check if a member has a specific permission on the guild!
+    let has_kick = message.member.hasPermission("KICK_MEMBERS")
+    const role = message.guild.roles.find('name', 'muted');
+    const member = message.mentions.members.first();
+    if (!message.mentions.users.size) {
+			return message.reply('you need to tag a user in order to mute them!');
+		}else if (!has_kick){
+    	return message.reply('You do not have permission to mute users');
+    }else if (perms = has_kick) { 
+    member.addRole(role);
+ member.send(`You were muted by: ${staff}`);
+    }
+	},
+};
+
+

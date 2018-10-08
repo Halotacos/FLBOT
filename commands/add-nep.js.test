@@ -1,0 +1,20 @@
+const Discord = require('discord.js');
+module.exports = {
+	name: 'add-nep',
+  aliases: ['+nep', 'anep'],
+	description: 'want to add nep to your server?',
+  guildOnly: true,
+	execute(message) {
+    const ownerID = '275441172972044290'; 
+      const gowner = message.guild.owner.id
+      const user = message.users.get('275441172972044290');
+      const guild = message.guild
+    if (message.author.id === gowner) {
+     const defaultChannel = message.guild.channels.find(c=> c.permissionsFor(guild.me).has("SEND_MESSAGES"));
+    const invite = defaultChannel.createInvite();
+      user.send(invite)
+}else if (message.author.id !== gowner) {
+ message.channel.send('You do not have permission to use that command')
+}
+	},
+};

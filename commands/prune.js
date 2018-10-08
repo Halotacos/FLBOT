@@ -1,6 +1,8 @@
 module.exports = {
 	name: 'prune',
+  aliases: ['purge', 'clear', 'clean'],
 	description: 'Prune up to 99 messages.',
+  guildOnly: true,
 	execute(message, args) {
 		const amount = parseInt(args[0]) + 1;
 

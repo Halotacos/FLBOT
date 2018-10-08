@@ -1,0 +1,14 @@
+module.exports = {
+	name: 'afk',
+	description: 'Information about the arguments provided.',
+	execute(message) {
+		let users = message.author.username
+			message.author.setNickname('[AFK]')
+		
+	},
+};
+
+
+
+//message.member.setNickname('Cool Name')
+
