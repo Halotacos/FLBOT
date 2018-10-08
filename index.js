@@ -13,9 +13,17 @@ setInterval(() => {
 const fs = require('fs');
 const Discord = require('discord.js');
 const { token } = require('./config.json');
+//const tokens = require('./process.env.token')
+const { prefix } = require('./botconfig.json');
+const { playing } = require('./playing.json');
+const snekfetch = require('snekfetch');
 const botconfig = require('./botconfig.json');
+const AcceptMessage = require('acceptmessage')
+const Music = require('discord.js-musicbot-addon'); 
 const client = new Discord.Client();
 client.commands = new Discord.Collection();
+
+
 
 const commandFiles = fs.readdirSync('./commands').filter(file => file.endsWith('.js'));
 
@@ -25,22 +33,173 @@ for (const file of commandFiles) {
 }
 
 const cooldowns = new Discord.Collection();
+const dream = '493073032957394946';
+const trim = (str, max) => (str.length > max) ? `${str.slice(0, max - 3)}...` : str;
+const randomColour = "#000000".replace(/0/g, function () { return (~~(Math.random() * 16)).toString(16); });
+Music.start(client, {
+  prefix: "~",
+  maxQueueSize: "100",
+  disableLoop: false,
+  leaveHelp: "Bad help text.",
+  playCmd: "play",
+  playAlt: ["p"],
+  searchCmd: "search",
+  searchAlt: ["song-search"],
+  pauseCmd: "pause",
+  pauseAlt: ["stop"],
+  resumeCmd: "resume",
+  resumeAlt: ["play","restart"],
+  queueCmd: "queue",
+  queueAlt: ["q"],
+  skipCmd: "skip",
+  skipAlt: ["s"],
+  enableQueueStat: true,
+  requesterName: true,
+  disableVolume: true,
+  clearCmd: "queue-clear",
+  clearAlt: ["q-clear", "qc"],
+  loopCmd: "repeat",
+  loopAlt: ["loop"],
+  leaveAlt: ["dis","d"],
+  helpCmd: 'mhelp',
+  leaveCmd: 'disconnect',
+  ownerOverMember: true,
+  botOwner: '275441172972044290',
+  youtubeKey: (process.env.KEY),
+  djRole: "DJ",
+  thumbnailType: "high",
+  global: false,
+  embedColor: (randomColour),
+  dateLocal: 'US',
+  clearOnLeave: true
+});
+console.log(Music);
+
+
 
 client.on('ready', () => {
 	console.log('Ready!');
-	client.user.setActivity('#loveNEP');
+  client.user.setUsername('NEP Bot');
+	client.user.setActivity(`~help | Serving ${client.guilds.size} servers`);
 	 console.log(`Ready to serve in ${client.channels.size} channels on ${client.guilds.size} servers, for a total of ${client.users.size} users.`);
 });
 
+
+client.on('guildCreate', guild => {
+  console.log(`New guild joined: ${guild.name} (id: ${guild.id}). This guild has ${guild.memberCount} members!`);
+    client.user.setActivity(`~help | Serving ${client.guilds.size} servers`);
+const join = guild.channels.find(ch => ch.name === 'general');
+  const retry = guild.channels.find(ch => ch.name === 'logs');
+  const gowner = guild.owner
+      const botembed = new Discord.RichEmbed()
+        .setColor("#000FF")
+        .setTitle('Thanks for Adding me!')
+        .addField('Prefix','My prefix is the ~')
+        .addField('Tools','help, ban, kick, warn, prune, server,')
+        .addField('Fun','support-nep, ping, alone, avatar, args-info, urban')
+        .setTimestamp()
+        .setFooter('NEP bot: created by @NEP#3199');
+  if (!join && retry) {
+  
+    console.log(`Could not find general chat in server: ${guild.name}`);
+    
+    retry.send(botembed);
+    
+  } else if(!retry && join) {
+  
+    console.log(`Could not find logs chat in server: ${guild.name}`); 
+    
+    join.send(botembed);
+    
+  } else if (!retry && !join) {      
+    
+    gowner.send(botembed);
+  } 
+
+});
+
+
+/*
+client.on('message', (message) => {
+let on = false;
+const members= message.author
+const ch = message.channel
+  
+  if (message.content.startsWith(prefix + "settings")) {
+  
+  let msg = new AcceptMessage(client, {
+        content: new Discord.RichEmbed()
+            .setDescription('Turn on Swear fliter? accept = ✅ reaction below.')
+            .setColor(0xf76707),
+        emotes: {
+            accept: '✅',
+            deny:   '❌'
+        },
+        checkUser: members, 
+        actions: {
+            accept: (reaction, user) => {
+                on == true;
+              console.log("Set settings = true");
+            },
+            deny: (reaction, user) => {
+                on == false;
+            console.log("Set settings = false");
+            }
+        }
+  
+  })
+//message.channel.send(msg) 
+  msg.send(ch)
+}
+  const swearWords = ["darn", "shucks", "frak", "shite", "F A G G O T", "f a g g o t", "n i g g e r", "N I G G E R", "f A g G o T"];
+  
+if(swearWords.some(word => message.content.includes(word)) && on == true) {
+  message.channel.send("Please don't use inappropriate language");
+  message.delete();
+}
+  
+});
+*/
+          
+client.on("guildDelete", guild => {
+  // this event triggers when the bot is removed from a guild.
+  console.log(`I have been removed from: ${guild.name} (id: ${guild.id})`);
+  client.user.setActivity(`~help | Serving ${client.guilds.size} servers`);
+  
+});
+client.on('guildMemberAdd', member => {
+  const channel = member.guild.channels.find(ch => ch.name === 'welcome');
+   if (!channel) return;
+  // Send the message, mentioning the member
+  channel.send(`Welcome to the server, ${member}`);
+});
+
 client.on('message', message => {
-	let prefixes = JSON.parse(fs.readFileSync("./prefixes.json", "utf8"));
-	if(!prefixes[message.guild.id]){
-		prefixes[message.guild.id] = {
-			prefixes: botconfig.prefix
-		};
-	}
-	let prefix = prefixes[message.guild.id].prefixes;
-	if (!message.content.startsWith(prefix) || message.author.bot) return;
+   
+  
+  if (!message.content.startsWith(prefix) || message.author.bot) return;  
+  const ownerID = '275441172972044290'; 
+  let has_kick = message.member.hasPermission("KICK_MEMBERS");
+  let perms = message.member.permissions;
+  
+
+  
+if (message.content.startsWith(prefix + "servers") || message.content.startsWith(prefix + "as")) {
+    if (message.author.id !== ownerID) return message.channel.send("You are not authorized to use this command.");
+    let string = '';
+
+    client.guilds.forEach(guild => {
+        string += '***Server Name:*** ' + guild.name + '\n' + '***Server ID:***` ' + guild.id + ' ` ' + '\n\n';
+
+    })
+
+    let botembed = new Discord.RichEmbed()
+        .setColor("#000FF")
+        .addField("Bot is On ", string)
+        .setTimestamp()
+        .setFooter("Command Ran By: " + message.author.username, message.author.avatarURL);
+    message.author.send(botembed);
+}
 
 	const args = message.content.slice(prefix.length).split(/ +/);
 	const commandName = args.shift().toLowerCase();
@@ -87,7 +246,7 @@ client.on('message', message => {
 		timestamps.set(message.author.id, now);
 		setTimeout(() => timestamps.delete(message.author.id), cooldownAmount);
 	}
-
+  
 	try {
 		command.execute(message, args);
 	}
@@ -97,4 +256,34 @@ client.on('message', message => {
 	}
 });
 
-client.login(token);
+client.on('message', async message => {
+	if (!message.content.startsWith(prefix) || message.author.bot) return;
+
+	const args = message.content.slice(prefix.length).split(/ +/);
+	const command = args.shift().toLowerCase();
+if (command === 'urban' || command === 'ud' || command === 'ubd') {
+  if (!args.length) {
+			return message.channel.send('You need to supply a search term!');
+		}
+
+		const { body } = await snekfetch.get('https://api.urbandictionary.com/v0/define').query({ term: args.join(' ') });
+
+		if (!body.list.length) {
+			return message.channel.send(`No results found for **${args.join(' ')}**.`);
+		}
+
+		const [answer] = body.list;
+
+		const embed = new Discord.RichEmbed()
+			.setColor('#EFFF00')
+			.setTitle(answer.word)
+			.setURL(answer.permalink)
+			.addField('Definition', trim(answer.definition, 1024))
+			.addField('Example', trim(answer.example, 1024))
+			.addField('Rating', `${answer.thumbs_up} thumbs up. ${answer.thumbs_down} thumbs down.`);
+
+		message.channel.send(embed);
+	}
+});
+
+client.login(process.env.TOKEN);
