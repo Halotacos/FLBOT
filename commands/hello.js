@@ -2,7 +2,7 @@ const Discord = require('discord.js');
 module.exports = {
 	name: 'hello',
   aliases: ['hola', 'hoi'],
-	description: 'lonely',
+	description: 'HI!',
 	execute(message) {
 		let user = message.author
     const randomColor = "#000000".replace(/0/g, function () { return (~~(Math.random() * 16)).toString(16); });

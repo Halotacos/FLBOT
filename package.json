@@ -1,7 +1,4 @@
 {
-  "//1": "describes your app and its dependencies",
-  "//2": "https://docs.npmjs.com/files/package.json",
-  "//3": "updating this file will download and update your packages",
   "name": "Discord-Bot",
   "author": "NEP",
   "version": "0.0.3",
@@ -10,16 +7,19 @@
   "scripts": {
     "start": "node index.js"
   },
+  "homepage": "https://github.com/Halotacos/FLBOT/blob/master/README.md",
   "dependencies": {
     "discord.js": "^11.4.2",
-    "npm": "^6.4.1",
+    "npm": "^6.5.0",
     "acceptmessage": "^1.1.0",
     "ffmpeg": "^0.0.4",
-    "node-opus": "^0.3.0",
-    "discord.js-musicbot-addon-v2": "^1.10.4",
-    "express": "^4.16.3",
-    "ytdl-core": "^0.26.1",
-    "discord.js-musicbot-addon": "^12.0.6"
+    "node-opus": "^0.3.1",
+    "express": "^4.16.4",
+    "ytdl-core": "^0.29.0",
+    "discord.js-musicbot-addon": "^13.4.4",
+    "sequelize": "^4.42.0",
+    "mysql2": "^1.6.4",
+    "mysql": "^2.16.0"
   },
   "engines": {
     "node": "8.0.x"

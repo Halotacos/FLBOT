@@ -1,29 +1,31 @@
-const Discord = require('discord.js');
+if (message.channel.type === "dm") { //if the channel is a DM channel
+    var args = message.content.split(" ").slice(0)
+    var args = args.slice(0).join(" ") //create the args
 
-const exampleEmbed = new Discord.RichEmbed()
-    .setColor('#0099ff')
-    .setTitle('Forbidden Love staff')
-    .setAuthor('FL Bot', 'https://cdn.discordapp.com/attachments/460993484162203649/493931942132187156/icon.png', 'https://www.youtube.com/watch?v=wJnBTPUQS5A')
-    .setDescription('Here is all of our staff.')
-    .setThumbnail('https://cdn.discordapp.com/attachments/460993484162203649/493931942132187156/icon.png')
-    .addField('Owner', '@Em 🥀#0323')
-    .addField('Co-Owner', '@Sleepie ♥#3301')
-    .addField('Head-Madmin', '@Lily#1606')
-    .addField('Madmin', '@Brandon#4581')
-    .addField('Smol-Madmin', '@NEP#3199 & @Shadow.#4781 & @ayetofu#1422')
-    .addField('ModSquad', '@Raishin#2140 & @ＤＯＧＥ　ーし鬱#4278')
-    .addField('Smol-Mod', '@echooftheforest#7687 & @🌷Luna#5936 & @jason#0420')
-    .setTimestamp()
-    .setFooter('© 2018 NEP & Forbidden Love.', 'https://cdn.discordapp.com/attachments/460993484162203649/493931942132187156/icon.png');
+    if (message.content.startsWith(prefix)) return message.channel.send(":x: Please use commands in real server! :x:") //if the message is a command
+    message.channel.send("This message has been send to the staff! :incoming_envelope:");
+    if (message.content.startsWith(prefix)) return
+    if (args.length > 256) return message.reply("Your message content too many characters :/")
+    var embed = new Discord.RichEmbed()
+        .setColor('RANDOM')
+        .setTitle("New request in DM!")
+        .addField(args, "Send by: " + message.author.username + " with the ID: " + message.author.id)
+    bot.guilds.get("YOUR_GUILD_ID").channels.get("YOUR_CHANNEL_ID").send(embed) //send the embed in a specific channel
+}
 
-    module.exports = {
-    	name: 'staff',
-      aliases: ['team', 'sl'],
-    	description: 'Displays the Staff team.',
-    	execute(message) {
-    		message.channel.send(exampleEmbed);
-        message.delete(10000)
-  .then(msg => console.log(`Deleted message from ${msg.author.username}`))
-  .catch(console.error);
-    	},
-    };
+
+if (message.content.startsWith(prefix + "reply")) {
+    if (message.author.id !== "YOUR_ID") return message.reply('You cannot use that!')
+    var args = message.content.split(" ").slice(0)
+    var Rargs = message.content.split(" ").slice(2).join(" ")
+    var userID = args[1]
+    if (isNaN(args[1])) return message.reply("This is not an ID!")
+    var embed = new Discord.RichEmbed()
+        .setColor('RANDOM')
+        .setTitle("the staff answered you!")
+        .setDescription(Rargs)
+        .setFooter("this message was sent to you by: " +  message.author.username + " !")
+    bot.users.get(userID).send(embed)
+    message.channel.send("Send!").catch(console.error) //send the message
+    //it may be that if the user has blocked your bot that it does not work
+}

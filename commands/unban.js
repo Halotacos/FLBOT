@@ -1,7 +1,6 @@
 module.exports = {
-	name: 'ban',
-  aliases: ['banhammer', 'banmember'],
-	description: 'Tag a member and ban them.',
+	name: 'unban',
+	description: 'Tag a member and unban them.',
   args: true,
   guildOnly: true,  
 	execute(message, args) {
@@ -9,7 +8,6 @@ module.exports = {
     const member = message.author
     const guild = message.guild
     const user = message.mentions.users.first();
-    const id = message.mentions.users.first.id
         let perms = message.member.permissions;
 
 // Check if a member has a specific permission on the guild!
@@ -21,8 +19,7 @@ let has_kick = message.member.hasPermission("BAN_MEMBERS");
     }else if(perms = has_kick){
     let reason = args.slice(1).join(' ');
     user.send(`You were banned by ${staff} for: ${reason}`);
-    guild.ban(user);
-      member.send(`Id of who you banned: ${id}`)
+    guild.unban(user);
     }
 	},
 };
