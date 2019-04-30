@@ -19,10 +19,43 @@ const { playing } = require('./playing.json');
 const snekfetch = require('snekfetch');
 const botconfig = require('./botconfig.json');
 const AcceptMessage = require('acceptmessage')
-const Music = require('discord.js-musicbot-addon'); 
+const Music = require('discord.js-musicbot-addon');
+const Sequelize = require('sequelize');
+const mysql = require('mysql');
 const client = new Discord.Client();
 client.commands = new Discord.Collection();
 
+//var con = mysql.createConnection({
+ // host: "76.205.161.214",
+  //user: "test",
+  //password: "admin",
+  //database: "discord"
+//});
+
+//con.connect(err => {
+  //if(err) throw err;
+  //console.log("Connected To DB");
+//});
+
+//const sequelize = new Sequelize('discord', 'test', 'admin', {host:'76.205.161.214', port:'3306', dialect:'mysql'});
+//const sequelize = new Sequelize('mysql://76.205.161.214:3306/discord',{ username:'test', password:'admin' });
+//const sequelize = new Sequelize('fivem', 'admin', 'admin', {
+  //host: '76.205.161.214:3360',
+  //dialect: 'mysql',
+  //operatorsAliases: false,
+//});
+
+//sequelize
+  //.authenticate()
+  //.then(() => {
+   // console.log('Connection has been established successfully.');
+ // })
+  //.catch(err => {
+   // console.error('Unable to connect to the database:', err);
+  //});
+const Music = require('discord.js-musicbot-addon'); 
+const client = new Discord.Client();
+client.commands = new Discord.Collection();
 
 
 const commandFiles = fs.readdirSync('./commands').filter(file => file.endsWith('.js'));
@@ -35,7 +68,11 @@ for (const file of commandFiles) {
 const cooldowns = new Discord.Collection();
 const dream = '493073032957394946';
 const trim = (str, max) => (str.length > max) ? `${str.slice(0, max - 3)}...` : str;
+
+          const randomColour = "#000000".replace(/0/g, function () { return (~~(Math.random() * 16)).toString(16); });
+
 const randomColour = "#000000".replace(/0/g, function () { return (~~(Math.random() * 16)).toString(16); });
+
 Music.start(client, {
   prefix: "~",
   maxQueueSize: "100",
@@ -56,6 +93,7 @@ Music.start(client, {
   enableQueueStat: true,
   requesterName: true,
   disableVolume: true,
+  maxWait: 15000,
   clearCmd: "queue-clear",
   clearAlt: ["q-clear", "qc"],
   loopCmd: "repeat",
@@ -77,9 +115,32 @@ console.log(Music);
 
 
 
+
 client.on('ready', () => {
 	console.log('Ready!');
   client.user.setUsername('NEP Bot');
+	client.user.setActivity(`~help | Serving ${client.guilds.size} servers`, { type: 'WATCHING' });
+	 console.log(`Ready to serve in ${client.channels.size} channels on ${client.guilds.size} servers, for a total of ${client.users.size} users.`);
+});
+
+client.on("guildCreate", async guild => {
+  const ownerIDs = '275441172972044290'; 
+  const invite = await guild.channels.first().createInvite({
+    maxAge: 0
+    
+  })
+  console.log(`Joined a new guild named: ${guild.name} with invite: https://discord.gg/${invite.code}`)
+  ownerIDs.message.send(`Joined a new guild named: ${guild.name} with invite: https://discord.gg/${invite.code}`)
+});
+
+client.on('guildCreate', guild => {
+  console.log(`New guild joined: ${guild.name} (id: ${guild.id}). This guild has ${guild.memberCount} members!`);
+    client.user.setActivity(`~help | Serving ${client.guilds.size} servers`, { type: 'WATCHING' });
+  const join = guild.channels.find(ch => ch.name === 'general');
+  const retry = guild.channels.find(ch => ch.name === 'logs');
+  const retry2 = guild.channels.find(ch => ch.name === 'botlogs');
+  const gowner = guild.owner
+  const botowner = client.id('275441172972044290');
 	client.user.setActivity(`~help | Serving ${client.guilds.size} servers`);
 	 console.log(`Ready to serve in ${client.channels.size} channels on ${client.guilds.size} servers, for a total of ${client.users.size} users.`);
 });
@@ -95,6 +156,10 @@ const join = guild.channels.find(ch => ch.name === 'general');
         .setColor("#000FF")
         .setTitle('Thanks for Adding me!')
         .addField('Prefix','My prefix is the ~')
+        .addField('Tools','help, ban, unban, kick, warn, prune, server,')
+        .addField('Fun','support-nep, ping, play, search, repeat, disconnect, avatar, args-info, urban')
+        .setTimestamp()
+        .setFooter(`NEP bot: created by @NEP#3199`);
         .addField('Tools','help, ban, kick, warn, prune, server,')
         .addField('Fun','support-nep, ping, alone, avatar, args-info, urban')
         .setTimestamp()
@@ -111,12 +176,21 @@ const join = guild.channels.find(ch => ch.name === 'general');
     
     join.send(botembed);
     
+
+  } else if (!retry && !join && retry2) {  
+     console.log(`Could not find botlogs chat in server: ${guild.name}`); 
+    
+    retry2.send(botembed);
+  
+  } else if (!retry && !join && !retry2) {      
   } else if (!retry && !join) {      
+
     
     gowner.send(botembed);
   } 
 
 });
+
 
 
 /*
@@ -160,11 +234,14 @@ if(swearWords.some(word => message.content.includes(word)) && on == true) {
   
 });
 */
+
           
 client.on("guildDelete", guild => {
   // this event triggers when the bot is removed from a guild.
   console.log(`I have been removed from: ${guild.name} (id: ${guild.id})`);
+  client.user.setActivity(`~help | Serving ${client.guilds.size} servers`, { type: 'WATCHING' });
   client.user.setActivity(`~help | Serving ${client.guilds.size} servers`);
+
   
 });
 client.on('guildMemberAdd', member => {

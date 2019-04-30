@@ -2,6 +2,7 @@ const Discord = require('discord.js');
 module.exports = {
 	name: 'hello',
   aliases: ['hola', 'hoi'],
+	description: 'HI!',
 	description: 'lonely',
 	execute(message) {
 		let user = message.author
