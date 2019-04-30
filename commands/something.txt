@@ -86,3 +86,4 @@ if( swearWords.some(word => message.content.includes(word)) && !has_kick ) {
 	message.channel.send(embed);
   
    .setDescription(`How Lewd *${message.author.username}**!`)                 
+}

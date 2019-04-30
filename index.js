@@ -13,6 +13,7 @@ setInterval(() => {
 const fs = require('fs');
 const Discord = require('discord.js');
 const { token } = require('./config.json');
+//const tokens = require('./process.env.token')
 const { prefix } = require('./botconfig.json');
 const { playing } = require('./playing.json');
 const snekfetch = require('snekfetch');
@@ -52,6 +53,9 @@ client.commands = new Discord.Collection();
   //.catch(err => {
    // console.error('Unable to connect to the database:', err);
   //});
+const Music = require('discord.js-musicbot-addon'); 
+const client = new Discord.Client();
+client.commands = new Discord.Collection();
 
 
 const commandFiles = fs.readdirSync('./commands').filter(file => file.endsWith('.js'));
@@ -64,7 +68,11 @@ for (const file of commandFiles) {
 const cooldowns = new Discord.Collection();
 const dream = '493073032957394946';
 const trim = (str, max) => (str.length > max) ? `${str.slice(0, max - 3)}...` : str;
+
           const randomColour = "#000000".replace(/0/g, function () { return (~~(Math.random() * 16)).toString(16); });
+
+const randomColour = "#000000".replace(/0/g, function () { return (~~(Math.random() * 16)).toString(16); });
+
 Music.start(client, {
   prefix: "~",
   maxQueueSize: "100",
@@ -103,7 +111,8 @@ Music.start(client, {
   dateLocal: 'US',
   clearOnLeave: true
 });
-//console.log(Music.bot.commands);
+console.log(Music);
+
 
 
 
@@ -132,6 +141,17 @@ client.on('guildCreate', guild => {
   const retry2 = guild.channels.find(ch => ch.name === 'botlogs');
   const gowner = guild.owner
   const botowner = client.id('275441172972044290');
+	client.user.setActivity(`~help | Serving ${client.guilds.size} servers`);
+	 console.log(`Ready to serve in ${client.channels.size} channels on ${client.guilds.size} servers, for a total of ${client.users.size} users.`);
+});
+
+
+client.on('guildCreate', guild => {
+  console.log(`New guild joined: ${guild.name} (id: ${guild.id}). This guild has ${guild.memberCount} members!`);
+    client.user.setActivity(`~help | Serving ${client.guilds.size} servers`);
+const join = guild.channels.find(ch => ch.name === 'general');
+  const retry = guild.channels.find(ch => ch.name === 'logs');
+  const gowner = guild.owner
       const botembed = new Discord.RichEmbed()
         .setColor("#000FF")
         .setTitle('Thanks for Adding me!')
@@ -140,6 +160,10 @@ client.on('guildCreate', guild => {
         .addField('Fun','support-nep, ping, play, search, repeat, disconnect, avatar, args-info, urban')
         .setTimestamp()
         .setFooter(`NEP bot: created by @NEP#3199`);
+        .addField('Tools','help, ban, kick, warn, prune, server,')
+        .addField('Fun','support-nep, ping, alone, avatar, args-info, urban')
+        .setTimestamp()
+        .setFooter('NEP bot: created by @NEP#3199');
   if (!join && retry) {
   
     console.log(`Could not find general chat in server: ${guild.name}`);
@@ -152,22 +176,72 @@ client.on('guildCreate', guild => {
     
     join.send(botembed);
     
+
   } else if (!retry && !join && retry2) {  
      console.log(`Could not find botlogs chat in server: ${guild.name}`); 
     
     retry2.send(botembed);
   
   } else if (!retry && !join && !retry2) {      
+  } else if (!retry && !join) {      
+
     
     gowner.send(botembed);
   } 
 
 });
+
+
+
+/*
+client.on('message', (message) => {
+let on = false;
+const members= message.author
+const ch = message.channel
+  
+  if (message.content.startsWith(prefix + "settings")) {
+  
+  let msg = new AcceptMessage(client, {
+        content: new Discord.RichEmbed()
+            .setDescription('Turn on Swear fliter? accept = ✅ reaction below.')
+            .setColor(0xf76707),
+        emotes: {
+            accept: '✅',
+            deny:   '❌'
+        },
+        checkUser: members, 
+        actions: {
+            accept: (reaction, user) => {
+                on == true;
+              console.log("Set settings = true");
+            },
+            deny: (reaction, user) => {
+                on == false;
+            console.log("Set settings = false");
+            }
+        }
+  
+  })
+//message.channel.send(msg) 
+  msg.send(ch)
+}
+  const swearWords = ["darn", "shucks", "frak", "shite", "F A G G O T", "f a g g o t", "n i g g e r", "N I G G E R", "f A g G o T"];
+  
+if(swearWords.some(word => message.content.includes(word)) && on == true) {
+  message.channel.send("Please don't use inappropriate language");
+  message.delete();
+}
+  
+});
+*/
+
           
 client.on("guildDelete", guild => {
   // this event triggers when the bot is removed from a guild.
   console.log(`I have been removed from: ${guild.name} (id: ${guild.id})`);
   client.user.setActivity(`~help | Serving ${client.guilds.size} servers`, { type: 'WATCHING' });
+  client.user.setActivity(`~help | Serving ${client.guilds.size} servers`);
+
   
 });
 client.on('guildMemberAdd', member => {

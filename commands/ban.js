@@ -22,6 +22,7 @@ let has_kick = message.member.hasPermission("BAN_MEMBERS");
     let reason = args.slice(1).join(' ');
     user.send(`You were banned by ${staff} for: ${reason}`);
     guild.ban(user);
+
       member.send(`Id of who you banned: ${id}`)
     }
 	},
